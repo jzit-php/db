@@ -3,5 +3,5 @@
 ## Installation
 
 ```
-composer require jzit-php/db
+composer require jzit/db
 ```
