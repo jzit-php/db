@@ -2,6 +2,7 @@
 
 namespace JzIT\Db\EntityManager;
 
+use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Tools\Setup;
 use JzIT\Db\DbConfig;
@@ -30,12 +31,29 @@ class EntityManager
     protected $cache;
 
     /**
+     * @var string
+     */
+    protected $workingDir;
+
+    /**
+     * @var \Doctrine\DBAL\Driver\Connection|null
+     */
+    protected $connection;
+
+    /**
      * @var bool
      */
     protected $useSimpleAnnotationReader;
 
-    public function __construct(DbConfig $config)
+    /**
+     * EntityManager constructor.
+     *
+     * @param \JzIT\Db\DbConfig $config
+     * @param \Doctrine\DBAL\Driver\Connection|null $connection
+     */
+    public function __construct(DbConfig $config, Connection $connection = null)
     {
+        $this->connection = $connection;
         $this->config = $config;
         $this->init();
     }
@@ -46,7 +64,11 @@ class EntityManager
      */
     public function create(): DoctrineEntityManager
     {
-        return DoctrineEntityManager::create($this->getConnection(), $this->createConfig());
+        $connection = $this->connection;
+        if ($connection === null) {
+            $connection = $this->getConnection();
+        }
+        return DoctrineEntityManager::create($connection, $this->createConfig());
     }
 
     /**
@@ -57,6 +79,7 @@ class EntityManager
         $this->isDevMode = $this->config->isDevMode();
         $this->proxyDir = $this->config->getProxyDir();
         $this->cache = $this->config->getCache();
+        $this->workingDir = $this->config->getWorkingDir();
         $this->useSimpleAnnotationReader = $this->config->useSimpleAnnotationReader();
     }
 
@@ -65,7 +88,7 @@ class EntityManager
      */
     protected function createConfig(): Configuration
     {
-        return Setup::createAnnotationMetadataConfiguration([__DIR__ . "/src"], $this->isDevMode, $this->proxyDir, $this->cache, $this->useSimpleAnnotationReader);
+        return Setup::createAnnotationMetadataConfiguration([$this->workingDir], $this->isDevMode, $this->proxyDir, $this->cache, $this->useSimpleAnnotationReader);
     }
 
     /**

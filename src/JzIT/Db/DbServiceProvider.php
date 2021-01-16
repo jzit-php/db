@@ -6,6 +6,7 @@ namespace JzIT\Db;
 
 use Di\Container;
 use JzIT\Container\ServiceProvider\AbstractServiceProvider;
+use JzIT\Db\DBAL\DriverManager;
 
 /**
  * @method  \JzIT\Db\DbFactory getFactory()

@@ -91,4 +91,18 @@ class DbConfig extends AbstractConfig
             return null;
         }
     }
+
+    /**
+     * @return string
+     */
+    public function getWorkingDir(): string
+    {
+        $dir = 'Generated/Orm/Entities/';
+        try {
+            return sprintf('%s/%s', rtrim($this->get('src_dir'), '/'), $dir);
+        }
+        catch (\Exception $exception){
+            return $dir;
+        }
+    }
 }

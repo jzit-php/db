@@ -2,6 +2,8 @@
 
 namespace JzIT\Db;
 
+use JzIT\Db\DBAL\DriverManager;
+use JzIT\Db\DBAL\DriverManagerInterface;
 use JzIT\Db\EntityManager\EntityManager;
 use JzIT\Kernel\AbstractFactory;
 
@@ -19,6 +21,15 @@ class DbFactory extends AbstractFactory
      */
     public function createEntityManager(): EntityManager
     {
-        return new EntityManager($this->getConfig());
+        return new EntityManager($this->getConfig(), $this->createDriverManager()->getConnection());
+    }
+
+    /**
+     * @return \JzIT\Db\DBAL\DriverManagerInterface
+     * @throws \JzIT\Kernel\Exception\ConfigNotFoundException
+     */
+    public function createDriverManager(): DriverManagerInterface
+    {
+        return new DriverManager($this->getConfig());
     }
 }
