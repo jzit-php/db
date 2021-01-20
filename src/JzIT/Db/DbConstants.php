@@ -6,6 +6,7 @@ namespace JzIT\Db;
 
 interface DbConstants
 {
+    public const ENTITY_MANAGER = 'entityManager';
     public const DB_HOST = 'DB:HOST';
     public const DB_USER = 'DB:USER';
     public const DB_PASSWORD = 'DB:PASSWORD';

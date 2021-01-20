@@ -29,7 +29,7 @@ class DbServiceProvider extends AbstractServiceProvider
     protected function registerEntityManager(Container $container): DbServiceProvider
     {
         $em = $this->getFactory()->createEntityManager();
-        $container->set('entityManager', function () use ($em) {
+        $container->set(DbConstants::ENTITY_MANAGER, function () use ($em) {
             return $em->create();
         });
 
